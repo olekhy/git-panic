@@ -43,30 +43,67 @@ main() {
 	# must be a git repo
 	require_git_repo
 
+	local abort_rebase=0
+	local reset_head=0
+	local checkout_head=0
+	local cleanup_untracked=0
+	local update_submodule=0
+
+	echo "Inspecting working tree"
+
 	# abort any running rebases/merges
 	if [ -d "${DOTGIT_DIR}/rebase-merge" ]; then
-		echo "Rebase in progress..."
-		echo "    git rebase --abort"
+		echo "    Rebase in progress"
+		abort_rebase=1
 	fi
 
 	# check current cleanness
 	if ! git diff-index --cached --quiet --ignore-submodules HEAD --; then
-		echo "Index contains uncommited changes..."
-		echo "    git reset HEAD"
+		echo "    Index contains uncommited changes"
+		reset_head=1
 	fi
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
-		echo "Working tree contains unstaged changes..."
-		echo "    git checkout -- ."
+		echo "    Working tree contains unstaged changes"
+		checkout_head=1
 	fi
-	if ! git status | grep 'Untracked'; then
-		echo "Working tree contains untracked files..."
-		echo "    git clean -qdf"
+	if ! git status | grep -q 'Untracked'; then
+		echo "    Working tree contains untracked files"
+		cleanup_untracked=1
 	fi
 
-	if [ 0 -eq 1 ]; then
-		echo "Working copy has submodules..."
+	if [ ! -z "$(git submodule)" ]; then
+		echo "    Working tree has submodules"
+		update_submodule=1
+	fi
+
+	# TODO:
+	#if ! ask_confirmation "Are you sure you want to continu?"; then
+	#	echo "Nothing changed."
+	#	exit 0
+	#fi
+
+	# Perform actions
+	echo
+	echo "Performing cleanup"
+	if [ $abort_rebase -eq 1 ]; then
+		echo "    git rebase --abort"
+		echo "    rm -rf ${DOTGIT_DIR}/rebase-merge"
+	fi
+	if [ $reset_head -eq 1 ]; then
+		echo "    git reset HEAD"
+	fi
+	if [ $checkout_head -eq 1 ]; then
+		echo "    git checkout -- ."
+	fi
+	if [ $cleanup_untracked -eq 1 ]; then
+		echo "    git clean -qdf"
+	fi
+	if [ $update_submodule -eq 1 ]; then
 		echo "    git submodule update"
 	fi
+
+	echo
+	echo "Working tree now in clean state on branch '$(git_current_branch)'"
 }
 
 main "$@"
