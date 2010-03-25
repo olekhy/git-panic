@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# git-panic -- The short and safe way to a clean git working tree.
+#
+# Feel free to contribute to this project at:
+#    http://github.com/nvie/git-panic
+#
+# Copyright (c) 2010 by Vincent Driessen
+#
+
+# enable debug mode
+if [ "$DEBUG" = "yes" ]; then
+	set -x
+fi
+
+DOTGIT_DIR=$(git rev-parse --git-dir)
+GITPANIC_DIR=$(dirname "$0")
+
+usage() {
+	echo "usage: git panic [options]"
+}
+
+# shell output
+warn() { echo "$@" >&2; }
+die() { warn "$@"; exit 1; }
+
+git_local_branches() { git branch | sed 's/^[* ] //'; }
+git_remote_branches() { git branch -r | sed 's/^[* ] //'; }
+git_all_branches() { ( git branch; git branch -r) | sed 's/^[* ] //'; }
+git_all_tags() { git tag; }
+
+git_current_branch() {
+	git branch | grep '^\* ' | grep -v 'no branch' | sed 's/^* //g'
+}
+
+require_git_repo() {
+	if ! git rev-parse --git-dir >/dev/null 2>&1; then
+		die "fatal: Not a git repository"
+	fi
+}
+
+main() {
+	# must be a git repo
+	require_git_repo
+
+	# abort any running rebases/merges
+	if [ -d "${DOTGIT_DIR}/rebase-merge" ]; then
+		echo "Rebase in progress..."
+		echo "    git rebase --abort"
+	fi
+
+	# check current cleanness
+	if ! git diff-index --cached --quiet --ignore-submodules HEAD --; then
+		echo "Index contains uncommited changes..."
+		echo "    git reset HEAD"
+	fi
+	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
+		echo "Working tree contains unstaged changes..."
+		echo "    git checkout -- ."
+	fi
+	if ! git status | grep 'Untracked'; then
+		echo "Working tree contains untracked files..."
+		echo "    git clean -qdf"
+	fi
+
+	if [ 0 -eq 1 ]; then
+		echo "Working copy has submodules..."
+		echo "    git submodule update"
+	fi
+}
+
+main "$@"

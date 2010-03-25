@@ -1,0 +1,34 @@
+git-panic
+=========
+The simplest and easy way for Git newbies to restore their working copy back to
+a clean situation.
+
+
+Installing git-panic
+--------------------
+After downloading the sources from Github, you can install `git-panic`, using:
+
+	$ sudo make install
+
+By default, git-panic will be installed in /usr/local. To change the prefix
+where git-panic will be installed, simply specify it explicitly, using:
+
+	$ sudo make prefix=/opt/local install
+
+Or simply point your `PATH` environment variable to your git-panic checkout
+directory.
+
+
+Typical usage:
+--------------
+> Bob: "Aaaaaargh! I'm terribly scared of this working tree!
+>       It bit me three times already! I'm hurt and I'm lost.
+>       Git sucks."
+> Alice: "¡No problemo, El Bobbos!  
+>         git-panic is here to the rescue!"
+
+	$ git panic
+	Are you sure you want to restore your working copy and
+	potentially lose any local changes? [yn] y
+	Working copy restored back to last committed state.
+
