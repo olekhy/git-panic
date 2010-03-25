@@ -15,11 +15,6 @@ Alice:
 > "¡No problemo, El Bobbos!  
 > git-panic is here to the rescue!"
 
-	$ git panic
-	Are you sure you want to restore your working copy and
-	potentially lose any local changes? [yn] y
-	Working copy restored back to last committed state.
-
 
 Installing git-panic
 --------------------
