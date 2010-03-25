@@ -21,11 +21,14 @@ directory.
 
 Typical usage:
 --------------
-> Bob: "Aaaaaargh! I'm terribly scared of this working tree!
->       It bit me three times already! I'm hurt and I'm lost.
->       Git sucks."
-> Alice: "¡No problemo, El Bobbos!  
->         git-panic is here to the rescue!"
+Bob:
+> "Aaaaaargh! I'm terribly scared of this working tree!  
+> It bit me three times already! I'm hurt and I'm lost.  
+> Git sucks."
+
+Alice:
+> "¡No problemo, El Bobbos!  
+> git-panic is here to the rescue!"
 
 	$ git panic
 	Are you sure you want to restore your working copy and
