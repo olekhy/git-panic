@@ -76,8 +76,9 @@ main() {
 		update_submodule=1
 	fi
 
-	# TODO:
-	#if ! ask_confirmation "Are you sure you want to continu?"; then
+	# TODO: Have the user type out 'yes' fully to confirm. We don't want to
+	# make it easy to loose any data.
+	#if ! ask_confirmation "Are you sure you want to continue?"; then
 	#	echo "Nothing changed."
 	#	exit 0
 	#fi
