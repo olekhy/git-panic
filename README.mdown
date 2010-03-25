@@ -1,7 +1,7 @@
 git-panic
 =========
-The simplest and easy way for Git newbies to restore their working copy back to
-a clean situation.
+The simplest and easiest way for Git newbies to restore their working copy back
+to a clean situation, so they don't feel eerie about Git's perils.
 
 
 Installing git-panic
