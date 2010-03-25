@@ -4,6 +4,23 @@ The simplest and easiest way for Git newbies to restore their working copy back
 to a clean situation, so they don't feel eerie about Git's perils.
 
 
+Typical usage
+-------------
+Bob:
+> "Aaaaaargh! I'm terribly scared of this working tree!  
+> It bit me three times already! I'm hurt and I'm lost.  
+> Git sucks."
+
+Alice:
+> "¡No problemo, El Bobbos!  
+> git-panic is here to the rescue!"
+
+	$ git panic
+	Are you sure you want to restore your working copy and
+	potentially lose any local changes? [yn] y
+	Working copy restored back to last committed state.
+
+
 Installing git-panic
 --------------------
 After downloading the sources from Github, you can install `git-panic`, using:
@@ -19,19 +36,8 @@ Or simply point your `PATH` environment variable to your git-panic checkout
 directory.
 
 
-Typical usage:
---------------
-Bob:
-> "Aaaaaargh! I'm terribly scared of this working tree!  
-> It bit me three times already! I'm hurt and I'm lost.  
-> Git sucks."
-
-Alice:
-> "¡No problemo, El Bobbos!  
-> git-panic is here to the rescue!"
-
-	$ git panic
-	Are you sure you want to restore your working copy and
-	potentially lose any local changes? [yn] y
-	Working copy restored back to last committed state.
-
+Contributing
+------------
+If you know of a scary and/or hairy git working tree state that every Git
+newbie will wet his/her pants over, please feel free to extend git-panic to
+tackle those, too.  Send me pull requests or patches and I will include those.
