@@ -107,7 +107,7 @@ main() {
 	echo
 	echo "Performing cleanup"
 	if [ $abort_rebase -eq 1 ]; then
-		echo "    git rebase --abort"
+		echo "    git rebase --abort --quiet"
 		echo "    rm -rf ${DOTGIT_DIR}/rebase-merge"
 	fi
 	if [ $reset_head_hard -eq 1 ]; then
@@ -117,7 +117,7 @@ main() {
 		echo "    git clean -qdf"
 	fi
 	if [ $update_submodule -eq 1 ]; then
-		echo "    git submodule update"
+		echo "    git submodule --quiet update"
 	fi
 
 	echo
