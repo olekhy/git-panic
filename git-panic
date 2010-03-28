@@ -39,6 +39,24 @@ require_git_repo() {
 	fi
 }
 
+ask_confirmation() {
+	local question=$1
+	local answer=
+	while true; do
+		printf "%s (yes/no) " "${question}"
+		read answer
+
+		if [ "$answer" = "yes" ]; then
+			return 0
+		fi
+		if [ "$answer" = "no" ]; then
+			return 1
+		fi
+
+		echo "Please type 'yes' or 'no'."
+	done
+}
+
 main() {
 	# must be a git repo
 	require_git_repo
@@ -76,12 +94,15 @@ main() {
 		update_submodule=1
 	fi
 
-	# TODO: Have the user type out 'yes' fully to confirm. We don't want to
-	# make it easy to loose any data.
-	#if ! ask_confirmation "Are you sure you want to continue?"; then
-	#	echo "Nothing changed."
-	#	exit 0
-	#fi
+	echo
+	echo "If you continue, git-panic will restore your working tree to the last"
+	echo "known committed state on branch '$(git_current_branch)'."
+	echo "This will make you lose all unsaved changes in your local copy."
+	echo
+	if ! ask_confirmation "Please confirm you want to do this."; then
+		echo "Nothing changed."
+		exit 0
+	fi
 
 	# Perform actions
 	echo
