@@ -62,8 +62,7 @@ main() {
 	require_git_repo
 
 	local abort_rebase=0
-	local reset_head=0
-	local checkout_head=0
+	local reset_head_hard=0
 	local cleanup_untracked=0
 	local update_submodule=0
 
@@ -78,11 +77,11 @@ main() {
 	# check current cleanness
 	if ! git diff-index --cached --quiet --ignore-submodules HEAD --; then
 		echo "    Index contains uncommited changes"
-		reset_head=1
+		reset_head_hard=1
 	fi
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
 		echo "    Working tree contains unstaged changes"
-		checkout_head=1
+		reset_head_hard=1
 	fi
 	if git status | grep -q 'Untracked'; then
 		echo "    Working tree contains untracked files"
@@ -111,11 +110,8 @@ main() {
 		echo "    git rebase --abort"
 		echo "    rm -rf ${DOTGIT_DIR}/rebase-merge"
 	fi
-	if [ $reset_head -eq 1 ]; then
-		echo "    git reset HEAD"
-	fi
-	if [ $checkout_head -eq 1 ]; then
-		echo "    git checkout -- ."
+	if [ $reset_head_hard -eq 1 ]; then
+		echo "    git reset --hard --quiet HEAD"
 	fi
 	if [ $cleanup_untracked -eq 1 ]; then
 		echo "    git clean -qdf"
