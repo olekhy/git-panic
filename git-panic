@@ -118,8 +118,8 @@ main() {
 	echo
 	echo "Performing cleanup"
 	if [ $abort_rebase -eq 1 ]; then
-		echo "    git rebase --abort --quiet"
-		git rebase --abort --quiet
+		echo "    git rebase --abort"
+		git rebase --abort
 		echo "    rm -rf ${DOTGIT_DIR}/rebase-merge"
 		rm -rf "${DOTGIT_DIR}/rebase-merge"
 	fi
