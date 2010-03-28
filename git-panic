@@ -84,7 +84,7 @@ main() {
 		echo "    Working tree contains unstaged changes"
 		checkout_head=1
 	fi
-	if ! git status | grep -q 'Untracked'; then
+	if git status | grep -q 'Untracked'; then
 		echo "    Working tree contains untracked files"
 		cleanup_untracked=1
 	fi
