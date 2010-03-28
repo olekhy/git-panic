@@ -65,6 +65,7 @@ main() {
 	local reset_head_hard=0
 	local cleanup_untracked=0
 	local update_submodule=0
+	local nothing_todo=1
 
 	echo "Inspecting working tree"
 
@@ -72,25 +73,35 @@ main() {
 	if [ -d "${DOTGIT_DIR}/rebase-merge" ]; then
 		echo "    Rebase in progress"
 		abort_rebase=1
+		nothing_todo=0
 	fi
 
 	# check current cleanness
 	if ! git diff-index --cached --quiet --ignore-submodules HEAD --; then
 		echo "    Index contains uncommited changes"
 		reset_head_hard=1
+		nothing_todo=0
 	fi
 	if ! git diff --no-ext-diff --ignore-submodules --quiet --exit-code; then
 		echo "    Working tree contains unstaged changes"
 		reset_head_hard=1
+		nothing_todo=0
 	fi
 	if git status | grep -q 'Untracked'; then
 		echo "    Working tree contains untracked files"
 		cleanup_untracked=1
+		nothing_todo=0
 	fi
 
 	if [ ! -z "$(git submodule)" ]; then
 		echo "    Working tree has submodules"
 		update_submodule=1
+		nothing_todo=0
+	fi
+
+	if [ "$nothing_todo" -eq 1 ]; then
+		echo "Working tree clean. Nothing todo."
+		exit 0
 	fi
 
 	echo
